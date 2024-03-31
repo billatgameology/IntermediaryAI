@@ -38,11 +38,10 @@ safety_settings = {
     generative_models.HarmCategory.HARM_CATEGORY_HARASSMENT: generative_models.HarmBlockThreshold.BLOCK_MEDIUM_AND_ABOVE,
 }
 
-aistring = multiturn_generate_content()
 
 @app.route('/')
 def hello_world():
-    return aistring
+    return multiturn_generate_content()
 
 if __name__ == '__main__':
     port = int(os.environ.get('PORT', 8080))  # Default port or one provided by Cloud Run environment
