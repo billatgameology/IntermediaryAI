@@ -51,6 +51,9 @@ def chat():
     
     # Get the incoming message from the POST request
     incoming_message = request.json.get('message')
+
+    # Log the incoming message using Flask's built-in logger
+    app.logger.info(f'Received message: {incoming_message}')
     
     # Send the incoming message to the conversation
     convo.send_message(incoming_message)
@@ -58,6 +61,8 @@ def chat():
     # Get the last message from the conversation
     last_message = convo.last.text  # Or however you access the response message
 
+    app.logger.info(f'AI response: {last_message}')
+    
     # Return the response message as JSON
     return jsonify({"response": last_message})
 
