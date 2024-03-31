@@ -47,19 +47,20 @@ def hello_world():
 
 @app.route('/chat', methods=['POST'])
 def chat():
-    convo.send_message("Repeat my word, then add a word that starts with the last letter of my word.")
-    
     # Get the incoming message from the POST request
     incoming_message = request.json.get('message')
+
+    if not incoming_message:
+        return jsonify({"error": "No message provided"}), 400
 
     # Log the incoming message using Flask's built-in logger
     app.logger.info(f'Received message: {incoming_message}')
     
     # Send the incoming message to the conversation
-    convo.send_message(incoming_message)
+    response = convo.send_message(incoming_message)
     
-    # Get the last message from the conversation
-    last_message = convo.last.text  # Or however you access the response message
+    # Assuming convo.last.text provides the response message, or use response directly if available
+    last_message = response.text
 
     app.logger.info(f'AI response: {last_message}')
     
