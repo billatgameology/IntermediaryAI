@@ -1,6 +1,6 @@
 import os
 import google.generativeai as genai
-from flask import Flask
+from flask import Flask, request, jsonify
 
 app = Flask(__name__)
 
@@ -40,12 +40,26 @@ model = genai.GenerativeModel(model_name="gemini-1.0-pro",
 convo = model.start_chat(history=[
 ])
 
-
-
 @app.route('/')
 def hello_world():
-    convo.send_message("hi")
+    convo.send_message("Repeat my word, then add a word that starts with the last letter of my word.")
     return convo.last.text
+
+@app.route('/chat', methods=['POST'])
+def chat():
+    convo.send_message("Repeat my word, then add a word that starts with the last letter of my word.")
+    
+    # Get the incoming message from the POST request
+    incoming_message = request.json.get('message')
+    
+    # Send the incoming message to the conversation
+    convo.send_message(incoming_message)
+    
+    # Get the last message from the conversation
+    last_message = convo.last.text  # Or however you access the response message
+
+    # Return the response message as JSON
+    return jsonify({"response": last_message})
 
 if __name__ == '__main__':
     port = int(os.environ.get('PORT', 8080))  # Default port or one provided by Cloud Run environment
