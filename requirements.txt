@@ -1,3 +1,2 @@
 Flask
-google-cloud-aiplatform
 google-generativeai
