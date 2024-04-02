@@ -2,3 +2,5 @@ Flask
 google-generativeai
 langchain
 langsmith
+langchain-openai
+python-dotenv

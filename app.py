@@ -2,9 +2,21 @@ import os
 import google.generativeai as genai
 from flask import Flask, request, jsonify
 
+from langchain_openai import ChatOpenAI
+from langchain_core.prompts import ChatPromptTemplate
+from langchain_core.output_parsers import StrOutputParser
+
 app = Flask(__name__)
 
 genai.configure(api_key=os.environ.get("Gemini_API_Key"))
+
+llm = ChatOpenAI()
+prompt = ChatPromptTemplate.from_messages([
+    ("system", "You are world class technical documentation writer."),
+    ("user", "{input}")
+])
+output_parser = StrOutputParser()
+chain = prompt | llm | output_parser
 
 # Set up the model
 generation_config = {
@@ -64,8 +76,9 @@ def chat():
 
     app.logger.info(f'AI response: {last_message}')
     
+    chain_response = chain.invoke({"input": "In one word, what sound does chain makes?"})
     # Return the response message as JSON
-    return jsonify({"response": last_message})
+    return jsonify({"response": last_message + " and from chain:" + chain_response})
 
 if __name__ == '__main__':
     port = int(os.environ.get('PORT', 8080))  # Default port or one provided by Cloud Run environment
