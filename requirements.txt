@@ -1,2 +1,4 @@
 Flask
 google-generativeai
+langchain
+langsmith
