@@ -1,7 +1,11 @@
+python-dotenv
 Flask
-google-generativeai
+Flask-Testing
 langchain
 langsmith
 langchain-openai
-python-dotenv
-Flask-Testing
+langchain-groq
+langchain-google-vertexai
+langchain-community
+langchain-google-genai
+pillow
