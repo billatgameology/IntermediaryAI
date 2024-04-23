@@ -4,3 +4,4 @@ langchain
 langsmith
 langchain-openai
 python-dotenv
+Flask-Testing

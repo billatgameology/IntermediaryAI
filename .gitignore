@@ -1,2 +1,6 @@
 # dotenv environment variable files
 *.env
+
+# Local testing files
+CommonCommand.txt
+LocalTests/
