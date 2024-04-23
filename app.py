@@ -40,7 +40,7 @@ def chat():
     chain_response = llm(langchain_messages)
 
     # Return the response message as string
-    return jsonify({"from chain": chain_response.content})
+    return chain_response.content
 
 if __name__ == '__main__':
     port = int(os.environ.get('PORT', 8080))  # Default port or one provided by Cloud Run environment
