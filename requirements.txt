@@ -3,10 +3,8 @@ Flask
 Flask-Testing
 langsmith
 langchain
-langchain-core
 langchain-openai
 langchain-groq
-langchain-google-vertexai
 langchain-community
 langchain-google-genai
 pillow
