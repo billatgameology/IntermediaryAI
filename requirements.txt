@@ -1,8 +1,9 @@
 python-dotenv
 Flask
 Flask-Testing
-langchain
 langsmith
+langchain
+langchain-core
 langchain-openai
 langchain-groq
 langchain-google-vertexai
