@@ -4,6 +4,7 @@ from langchain_groq import ChatGroq
 from langchain_openai import AzureChatOpenAI, ChatOpenAI
 from langchain_google_genai import ChatGoogleGenerativeAI
 from langchain_core.messages import HumanMessage, AIMessage, SystemMessage
+from langchain_core.tools import tool
 
 app = Flask(__name__)
 
@@ -40,7 +41,26 @@ def create_llm(llm_model):
         return ChatGroq(model_name="mixtral-8x7b-32768")
     else:
         raise ValueError(f"Unsupported LLM model: {llm_model}")
-      
+
+@tool
+def CreateAgent(instruction: str) -> str:
+    "Create an agent, based on instruction create a detailed system message to agent"
+    return instruction
+
+@tool
+def SummonUncleTim(greeting: str) -> str:
+    "Summon Uncle Tim character, say hi"
+    return greeting
+
+@tool
+def ChangeModel(model: str) -> str:
+    "Select a LLM model, the options are Azure_GPT4, Azure_GPT3_5, Google_Gemini_1, Groq_Llama3_8B" 
+    return model     
+
+@tool
+def StoryKeyOutput(who: str, what: str, when: str) -> str:
+    "Extract the key output from the story, who, what, when" 
+    return who + " " + what + " " + when  
 
 @app.route('/chat', methods=['POST'])
 def chat():
@@ -58,6 +78,9 @@ def chat():
 
     # Create the LLM based on the selected model
     llm = create_llm(llm_model)
+
+    tools = [CreateAgent, SummonUncleTim, ChangeModel, StoryKeyOutput]
+    llm_with_tools = llm.bind_tools(tools)
 
     if llm is None:
         return jsonify({"error": f"LLM model not implemented: {llm_model}"}), 400
@@ -81,10 +104,25 @@ def chat():
             langchain_messages.append(SystemMessage(content=content))
     
     # Generate a response using the LLM
-    chain_response = llm(langchain_messages)
+    chain_response = llm_with_tools.invoke(langchain_messages)
+
+    # Check for tool calls in the response and parse accordingly
+    if chain_response.tool_calls:
+        tool_responses = []
+        for tool_call in chain_response.tool_calls:
+            tool_info = {
+                'tool_name': tool_call['name'],
+                'arguments': tool_call['args']
+            }
+            if 'output' in tool_call:
+                tool_info['output'] = tool_call['output']
+            tool_responses.append(tool_info)
+        output = {'tool_calls': tool_responses}
+    else:
+        output = {'content': chain_response.content}
 
     # Return the response message as string
-    return chain_response.content
+    return jsonify(output)
 
 if __name__ == '__main__':
     port = int(os.environ.get('PORT', 8080))  # Default port or one provided by Cloud Run environment
