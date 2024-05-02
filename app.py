@@ -6,6 +6,7 @@ from langchain_google_genai import ChatGoogleGenerativeAI
 from langchain_google_vertexai import VertexAI
 from langchain_core.messages import HumanMessage, AIMessage, SystemMessage
 from langchain_core.tools import tool
+import multinodal_image
 
 app = Flask(__name__)
 
@@ -191,7 +192,25 @@ def specialist():
     # Return the response message as JSON
     return jsonify(response_data)
 
+@app.route('/image', methods=['POST'])
+def process_image():
+    incoming_data = request.json
 
+    if not incoming_data:
+        return jsonify({"error": "No data provided"}), 400
+
+    app.logger.info(f'Received data: {incoming_data}')
+
+    base64_string = incoming_data.get('base64_string')
+
+    if not base64_string:
+        return jsonify({"error": "No base64 string provided"}), 400
+
+    # Call the generate function from googleImageTest.py
+    transcribed_text = multinodal_image.generate(base64_string)
+
+    # Return the transcribed text as the response
+    return jsonify({"transcribed_text": transcribed_text})
 
 if __name__ == '__main__':
     port = int(os.environ.get('PORT', 8080))  # Default port or one provided by Cloud Run environment
