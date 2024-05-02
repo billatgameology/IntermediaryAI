@@ -33,7 +33,7 @@ def create_llm(llm_model):
     elif llm_model == 'Google_Gemini_1':
         return ChatGoogleGenerativeAI(model="gemini-pro")
     elif llm_model == 'Google_Gemini_1_5':
-        return VertexAI(model="gemini-1.5-pro-latest")
+        return ChatGoogleGenerativeAI(model="gemini-1.5-pro-latest")
     elif llm_model == 'Groq_Llama3_8B':
         return ChatGroq(model_name="llama3-8b-8192")
     elif llm_model == 'Groq_Llama3_70B':
@@ -125,7 +125,43 @@ def chat():
     # Return the response message as string
     return jsonify(output)
 
+@app.route('/Special', methods=['POST'])
+def specialist():
+    # Get the incoming message from the POST request
+    incoming_data = request.json
 
+    if not incoming_data:
+        return jsonify({"error": "No data provided"}), 400
+
+    # Log the incoming data using Flask's built-in logger
+    app.logger.info(f'Received data: {incoming_data}')
+
+    # Create the LLM based on the selected model
+    llm = VertexAI(model="gemini-1.5-pro-latest")
+
+    # Extract the messages from the incoming data
+    messages = incoming_data.get('Messages', [])
+
+    # Create a list to store the Langchain messages
+    langchain_messages = []
+
+    # Convert the messages to Langchain message types
+    for message in messages:
+        role = message['role']
+        content = message['content']
+
+        if role == 'User':
+            langchain_messages.append(HumanMessage(content=content))
+        elif role == 'Assistant':
+            langchain_messages.append(AIMessage(content=content))
+        elif role == 'System':
+            langchain_messages.append(SystemMessage(content=content))
+    
+    # Generate a response using the LLM
+    chain_response = llm.invoke(langchain_messages)
+
+    # Return the response message as string
+    return jsonify(chain_response)
 
 
 
