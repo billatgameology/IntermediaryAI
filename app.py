@@ -137,7 +137,7 @@ def specialist():
     app.logger.info(f'Received data: {incoming_data}')
 
     # Create the LLM based on the selected model
-    llm = VertexAI(model="gemini-1.5-pro-latest")
+    llm = VertexAI(model="gemini-1.5-pro-preview-0409")
 
     # Extract the messages from the incoming data
     messages = incoming_data.get('Messages', [])
