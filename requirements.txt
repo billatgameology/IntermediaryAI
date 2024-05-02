@@ -7,4 +7,5 @@ langchain-openai
 langchain-groq
 langchain-community
 langchain-google-genai
+langchain-google-vertexai
 pillow
