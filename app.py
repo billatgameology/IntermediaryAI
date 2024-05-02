@@ -3,6 +3,7 @@ from flask import Flask, request, jsonify
 from langchain_groq import ChatGroq
 from langchain_openai import AzureChatOpenAI, ChatOpenAI
 from langchain_google_genai import ChatGoogleGenerativeAI
+from langchain_google_vertexai import ChatVertexAI
 from langchain_core.messages import HumanMessage, AIMessage, SystemMessage
 from langchain_core.tools import tool
 
@@ -32,7 +33,7 @@ def create_llm(llm_model):
     elif llm_model == 'Google_Gemini_1':
         return ChatGoogleGenerativeAI(model="gemini-pro")
     elif llm_model == 'Google_Gemini_1_5':
-        return ChatGoogleGenerativeAI(model="gemini-1.5-pro-latest")
+        return ChatVertexAI(model="gemini-1.5-pro-latest")
     elif llm_model == 'Groq_Llama3_8B':
         return ChatGroq(model_name="llama3-8b-8192")
     elif llm_model == 'Groq_Llama3_70B':
@@ -43,14 +44,14 @@ def create_llm(llm_model):
         raise ValueError(f"Unsupported LLM model: {llm_model}")
 
 @tool
-def CreateAgent(instruction: str) -> str:
-    "Create an agent, based on instruction create a detailed system message to agent"
-    return instruction
+def OpenNewDocument(instruction: str) -> None:
+    "Creates and opens a new word document"
+    pass
 
 @tool
-def SummonUncleTim(greeting: str) -> str:
-    "Summon Uncle Tim character, say hi"
-    return greeting
+def SummonUncleTim(greeting: str) -> None:
+    "When user wants to speak with Tim, use this function"
+    pass
 
 @tool
 def ChangeModel(model: str) -> str:
@@ -79,7 +80,7 @@ def chat():
     # Create the LLM based on the selected model
     llm = create_llm(llm_model)
 
-    tools = [CreateAgent, SummonUncleTim, ChangeModel, StoryKeyOutput]
+    tools = [SummonUncleTim, OpenNewDocument]
     llm_with_tools = llm.bind_tools(tools)
 
     if llm is None:
@@ -123,6 +124,10 @@ def chat():
 
     # Return the response message as string
     return jsonify(output)
+
+
+
+
 
 if __name__ == '__main__':
     port = int(os.environ.get('PORT', 8080))  # Default port or one provided by Cloud Run environment
