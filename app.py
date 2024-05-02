@@ -3,7 +3,7 @@ from flask import Flask, request, jsonify
 from langchain_groq import ChatGroq
 from langchain_openai import AzureChatOpenAI, ChatOpenAI
 from langchain_google_genai import ChatGoogleGenerativeAI
-from langchain_google_vertexai import ChatVertexAI
+from langchain_google_vertexai import VertexAI
 from langchain_core.messages import HumanMessage, AIMessage, SystemMessage
 from langchain_core.tools import tool
 
@@ -33,7 +33,7 @@ def create_llm(llm_model):
     elif llm_model == 'Google_Gemini_1':
         return ChatGoogleGenerativeAI(model="gemini-pro")
     elif llm_model == 'Google_Gemini_1_5':
-        return ChatVertexAI(model="gemini-1.5-pro-latest")
+        return VertexAI(model="gemini-1.5-pro-latest")
     elif llm_model == 'Groq_Llama3_8B':
         return ChatGroq(model_name="llama3-8b-8192")
     elif llm_model == 'Groq_Llama3_70B':
