@@ -160,8 +160,11 @@ def specialist():
     # Generate a response using the LLM
     chain_response = llm.invoke(langchain_messages)
 
-    # Return the response message as string
-    return jsonify(chain_response)
+    # Create a dictionary with the labeled response
+    response_data = {'content': chain_response}
+
+    # Return the response message as JSON
+    return jsonify(response_data)
 
 
 
