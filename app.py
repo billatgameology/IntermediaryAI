@@ -59,9 +59,9 @@ def ChangeModel(model: str) -> str:
     return model     
 
 @tool
-def StoryKeyOutput(who: str, what: str, when: str) -> str:
-    "Extract the key output from the story, who, what, when" 
-    return who + " " + what + " " + when  
+def TransferDocumentToTim(greeting: str) -> None:
+    "Copy or transfer document to Tim" 
+    pass 
 
 @app.route('/chat', methods=['POST'])
 def chat():
@@ -80,7 +80,7 @@ def chat():
     # Create the LLM based on the selected model
     llm = create_llm(llm_model)
 
-    tools = [SummonUncleTim, OpenNewDocument]
+    tools = [SummonUncleTim, OpenNewDocument, TransferDocumentToTim]
     llm_with_tools = llm.bind_tools(tools)
 
     if llm is None:
