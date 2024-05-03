@@ -199,8 +199,6 @@ def process_image():
     if not incoming_data:
         return jsonify({"error": "No data provided"}), 400
 
-    app.logger.info(f'Received data: {incoming_data}')
-
     base64_string = incoming_data.get('base64_string')
 
     if not base64_string:
