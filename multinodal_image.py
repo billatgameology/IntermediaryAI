@@ -29,6 +29,33 @@ def generate(base64_string):
 
     return transcribed_text
 
+def markup(base64_string):
+    vertexai.init(project="project-ada-418422", location="us-central1")
+    model = GenerativeModel("gemini-1.5-pro-preview-0409")
+
+    # Decode the base64 string into bytes
+    image_bytes = base64.b64decode(base64_string)
+
+    # Create a Part object from the image bytes
+    image_part = Part.from_data(
+        mime_type="image/png",
+        data=image_bytes
+    )
+
+    responses = model.generate_content(
+        [image_part, """a word document is markuped with red lines. Transcribe the text in the document and make the necessary corrections"""],
+        generation_config=generation_config,
+        safety_settings=safety_settings,
+        stream=True,
+    )
+
+    transcribed_text = ""
+    for response in responses:
+        transcribed_text += response.text
+
+    return transcribed_text
+
+
 generation_config = {
     "max_output_tokens": 8192,
     "temperature": 1,

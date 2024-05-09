@@ -210,6 +210,24 @@ def process_image():
     # Return the transcribed text as the response
     return jsonify({"transcribed_text": transcribed_text})
 
+@app.route('/markup', methods=['POST'])
+def process_image():
+    incoming_data = request.json
+
+    if not incoming_data:
+        return jsonify({"error": "No data provided"}), 400
+
+    base64_string = incoming_data.get('base64_string')
+
+    if not base64_string:
+        return jsonify({"error": "No base64 string provided"}), 400
+
+    # Call the generate function from googleImageTest.py
+    transcribed_text = multinodal_image.generate(base64_string)
+
+    # Return the transcribed text as the response
+    return jsonify({"transcribed_text": transcribed_text})
+
 if __name__ == '__main__':
     port = int(os.environ.get('PORT', 8080))  # Default port or one provided by Cloud Run environment
     app.run(debug=True, host='0.0.0.0', port=port)
