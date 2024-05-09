@@ -43,7 +43,7 @@ def markup(base64_string):
     )
 
     responses = model.generate_content(
-        [image_part, """a word document is markuped with red lines. Transcribe the text in the document and delete the text that is marked up with red lines"""],
+        [image_part, """a word document is markuped with red lines. Transcribe the text in the document and update document based on red lines markup"""],
         generation_config=generation_config,
         safety_settings=safety_settings,
         stream=True,

@@ -223,7 +223,7 @@ def process_markup():
         return jsonify({"error": "No base64 string provided"}), 400
 
     # Call the generate function from googleImageTest.py
-    transcribed_text = multinodal_image.generate(base64_string)
+    transcribed_text = multinodal_image.markup(base64_string)
 
     # Return the transcribed text as the response
     return jsonify({"transcribed_text": transcribed_text})
