@@ -211,7 +211,7 @@ def process_image():
     return jsonify({"transcribed_text": transcribed_text})
 
 @app.route('/markup', methods=['POST'])
-def process_image():
+def process_markup():
     incoming_data = request.json
 
     if not incoming_data:
