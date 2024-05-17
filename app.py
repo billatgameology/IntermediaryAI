@@ -31,6 +31,8 @@ def create_llm(llm_model):
         return ChatOpenAI(model_name='gpt-4')
     elif llm_model == 'OpenAI_GPT3_5':
         return ChatOpenAI(model_name='gpt-3.5-turbo')
+    elif llm_model == 'OpenAI_GPT4O':
+        return ChatOpenAI(model_name='gpt-4o')
     elif llm_model == 'Google_Gemini_1':
         return ChatGoogleGenerativeAI(model="gemini-pro")
     elif llm_model == 'Google_Gemini_1_5':
