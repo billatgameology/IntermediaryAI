@@ -9,3 +9,5 @@ langchain-community
 langchain-google-genai
 langchain-google-vertexai
 pillow
+langchain_core
+langchain-aws
